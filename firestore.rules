@@ -1,0 +1,10 @@
+rules_version='2';
+service cloud.firestore { match /databases/{database}/documents {
+  match /questions/{id} { allow read: if true; allow write: if isAdmin(); }
+  match /answerKeys/{id} { allow read,write: if isAdmin(); }
+  match /tests/{id} { allow read: if true; allow write: if isAdmin(); }
+  match /results/{id} { allow read,write: if false; }
+  match /sessions/{id} { allow read,write: if false; }
+  match /publicResults/{id} { allow read: if true; allow write: if false; }
+  function isAdmin(){ return request.auth != null && request.auth.token.admin == true; }
+}}
